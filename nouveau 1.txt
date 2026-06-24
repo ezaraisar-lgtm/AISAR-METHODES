@@ -1,0 +1,36 @@
+/* 
+After Effects ExtendScript to prepare a vertical TikTok "news edit" comp and
+Usage: open this script in After Effects File > Scripts > Run Script File...
+It creates a 9:16 comp, moves selected layers into it, arranges them vertical
+adds simple text headers, and queues to Adobe Media Encoder using the
+Note: AME integration requires After Effects to be configured to send to AME
+*/
+
+// Helper: alert-safe log
+function log(msg){ try{ $.writeln(msg); }catch(e){} }
+
+function main(){
+    if(app.project === null){
+        alert('No project open.');
+        return;
+    }
+
+    app.beginUndoGroup('Prepare TikTok Export');
+
+    // Get user options
+    var dlg = new Window('dialog', 'Prepare TikTok Export');
+    dlg.orientation = 'column';
+    dlg.alignChildren = ['fill', 'top'];
+
+    dlg.add('statictext', undefined, 'Create a 9:16 composition for TikTok (vertical):');
+
+    var nameGrp = dlg.add('group');
+    nameGrp.add('statictext', undefined, 'Comp name:');
+    var compName = nameGrp.add('edittext', undefined, 'TikTok_News_Edit');
+    compName.characters = 30;
+
+    dlg.add('group');
+    var text = dlg.add('statictext', undefined, 'Duration (seconds):');
+    var duration = dlg.add('edittext', undefined, '60');
+    duration.characters = 10;
+}
